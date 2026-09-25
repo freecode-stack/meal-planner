@@ -1,0 +1,7 @@
+dotenv
+langchain
+langchain-google-genai
+pydantic
+requests
+streamlit
+langchain-chroma
