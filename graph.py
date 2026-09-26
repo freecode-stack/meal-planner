@@ -32,7 +32,6 @@ def retrieve_recipes(state:MealPlannerState) -> MealPlannerState:
     results = retreival(vector_store, user_query=state.preferences, total_meals_required=total_meals_needed)
     recipes = [result.page_content for result in results]
     state.retrieved_recipes=recipes
-    print("Completed retrieve_recipes ----------")
     return state
 
 
@@ -59,7 +58,6 @@ def route_after_critique(state:MealPlannerState)->str:
     return "generate_shopping_list"
 
 def generate_meal_plan(state:MealPlannerState) -> MealPlannerState:
-    print("Inside generate_meal_plan----")
     # instruction=get_meal_plan_prompt(state.days,state.meals_per_day, state.preferences) # old code before RAG added.
     instruction=get_meal_plan_prompt(state.days,state.meals_per_day, state.retrieved_recipes)
     #region 
@@ -71,7 +69,6 @@ def generate_meal_plan(state:MealPlannerState) -> MealPlannerState:
 
     #endregion
     state.weekly_plan=response
-    print("Leaving generate_meal_plan----")
     return state
 
 def flatten_ingredients(plan : WeeklyPlan) -> list[str]:
