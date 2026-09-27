@@ -61,11 +61,12 @@ def generate_meal_plan(state:MealPlannerState) -> MealPlannerState:
     # instruction=get_meal_plan_prompt(state.days,state.meals_per_day, state.preferences) # old code before RAG added.
     instruction=get_meal_plan_prompt(state.days,state.meals_per_day, state.retrieved_recipes)
     #region 
-    # model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
-    # model_with_structure = model.with_structured_output(WeeklyPlan)
-    # response = model_with_structure.invoke(instruction)
+    model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
+    model_with_structure = model.with_structured_output(WeeklyPlan)
+    response = model_with_structure.invoke(instruction)
 
-    response=get_weekly_plan_json()
+    # For testing, load the samples from json file
+    # response=get_weekly_plan_json()
 
     #endregion
     state.weekly_plan=response
@@ -85,11 +86,12 @@ def generate_shopping_list(state:MealPlannerState) -> MealPlannerState:
     flatten_items = flatten_ingredients(state.weekly_plan)
     instruct= get_flatten_list_prompt(flatten_items)
     #region
-    # model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
-    # model_with_structure = model.with_structured_output(ShoppingList)
-    # result=model_with_structure.invoke(instruct)
-    
-    result=get_shopping_list_json()
+    model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
+    model_with_structure = model.with_structured_output(ShoppingList)
+    result=model_with_structure.invoke(instruct)
+
+    # For testing, load the samples from json file
+    # result=get_shopping_list_json()
     #endregion
     state.shopping_list=result
     return state
