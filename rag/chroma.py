@@ -8,7 +8,7 @@ from langchain_chroma import Chroma
 load_dotenv()
 os.environ["GOOGLE_API_KEY"]=os.getenv("GOOGLE_API_KEY")
 
-
+#region Old code for data parsing and embedding, kept for reference.
 # def data_parsing(data_file_path : str) -> list[Document]:        
 #     # df = pandas.read_csv("rag/meals.csv")
 #     df = pandas.read_csv(data_file_path)
@@ -26,15 +26,15 @@ os.environ["GOOGLE_API_KEY"]=os.getenv("GOOGLE_API_KEY")
 #         ]
 #     # print(documents[0])
 #     return documents
+#endregion
+
 def data_parsing(data_file_path : str) -> list[Document]:        
     # df = pandas.read_csv("rag/meals.csv")
     df = pandas.read_csv(data_file_path)
-    # print(df)
     df["Ingredients"] = df["Ingredients"].apply(lambda x : [i.strip() for i in x.split(",")])
     df["Nutrients"] = df["Nutrients"].apply(lambda x : [i.strip() for i in x.split(",")])
     df["micro_nutrients"] = df["micro_nutrients"].apply(lambda x : [i.strip() for i in x.split(",")])
-    # print("**************************************")
-    # print(df)
+
     documents= [
         Document (
             page_content=f"{row['Dish_name']}: {', '.join(row['Ingredients'])} :  {', '.join(row['Nutrients'])} : {row['portion_g']} : {row['protein_g']} : {row['carbs_g']} : {row['fat_g']} : {row['fiber_g']} : {', '.join(row['micro_nutrients'])}",
@@ -42,7 +42,7 @@ def data_parsing(data_file_path : str) -> list[Document]:
         )
         for _, row in df.iterrows()
         ]
-    # print(documents[0])
+
     return documents
 
 def embedding_and_store(document_list : list[Document], vector_store_path: str) -> Chroma:
